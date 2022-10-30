@@ -25,7 +25,8 @@ public class Elevator{
         System.out.printf("*** Current floor is: %d; State is: %s%n", curFloor, state.toString());
     }
 
-    public void setDestinationFloor(int dstFloor) {
+    @Deprecated
+    public void setDestinationFloorOld(int dstFloor) {
         this.dstFloor = dstFloor;
         System.out.println("*** Destination floor is: "+ dstFloor);
 
@@ -47,6 +48,48 @@ public class Elevator{
         }
         this.state = ElevatorState.IDLE;
         printInfo();
+    }
+
+    public void setDestinationFloor(int dstFloor) {
+        this.dstFloor = dstFloor;
+        System.out.println("*** Destination floor is: "+ dstFloor);
+        idle();
+    }
+
+    private void go_up() {
+        this.state = ElevatorState.MOVING_UP;
+        printInfo();
+
+        this.curFloor++;
+
+        if(this.dstFloor == this.curFloor) {
+            idle();
+        } else { // eq. to checking this.dstFloor > this.curFloor
+            go_up();
+        }
+    }
+    private void go_down() {
+        this.state = ElevatorState.MOVING_DOWN;
+        printInfo();
+
+        this.curFloor--;
+
+        if(this.dstFloor == this.curFloor) {
+            idle();
+        } else {
+            go_down();
+        }
+    }
+
+    private void idle() {
+        this.state = ElevatorState.IDLE;
+        printInfo();
+
+        if(this.dstFloor > this.curFloor) {
+            go_up();
+        } else if (this.dstFloor < this.curFloor) {
+            go_down();
+        }
     }
 
     @SuppressWarnings("unused")
